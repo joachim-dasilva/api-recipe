@@ -18,6 +18,9 @@
   },
   "homepage": "https://github.com/joachim-dasilva/api-recipe#readme",
   "dependencies": {
-    "express": "^4.17.2"
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0"
   }
 }
