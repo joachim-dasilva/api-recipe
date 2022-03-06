@@ -1,29 +1,20 @@
-const { RecetteLine } = require('./RecetteLine');
+var request = require("request");
+const { Manager } = require("./Manager");
+const { RecetteLine } = require("./RecetteLine");
 
-class Recette {
-    static next_id = 1;
-
-    constructor(nom, description, nbPersonne = 1, lines = []) {
-        this.id = Recette.next_id;
-        this.nom = nom;
-        this.description = description;
-        this.nbPersonne = nbPersonne;
-        this.lines = lines;
-
-        Recette.next_id++;
+class Recette extends Manager {
+    constructor() {
+        super("recette");
     }
 
-    addLine(txt, qte) {
-        const line = new RecetteLine(txt, qte);
-        this.lines.push(line);
-    }
-
-    setNbPersonne(nbPersonne) {
-        const taux = nbPersonne / this.nbPersonne;
-        for (const line of this.lines) {
-            line.setQte(line.qte * taux);
+    async save(data) {
+        const recetteLineManager = new RecetteLine();
+        const dataLines = data.lines;
+        data.lines = [];
+        for (const line of dataLines) {
+            data.lines.push(await recetteLineManager.save(line));
         }
-        this.nbPersonne = nbPersonne;
+        return await super.save(data);
     }
 }
 

@@ -1,12 +1,12 @@
 var request = require("request");
 const { Manager } = require("./Manager");
 
-class RecetteLine extends Manager {
+class Utilisateur extends Manager {
     constructor() {
-        super("recetteline");
+        super("utilisateur");
     }
 }
 
 module.exports = {
-    RecetteLine
+    Utilisateur
 }
