@@ -73,7 +73,7 @@ app.post('/login', async (req, res) => {
     return
   }
   const userJwt = jwt.sign({ email: result.login }, secret)
-  res.json({ jwt: userJwt })
+  res.json({ jwt: userJwt, user: result })
 })
 
 /**
@@ -145,6 +145,33 @@ app.post("/updateRecette/:id", passport.authenticate('jwt', { session: false }),
   const data = req.body;
   const recette = await RecetteManager.update(id, data);
   res.json({ recette: recette });
+})
+
+/**
+ * route: /likeRecette/:id/:user
+ * method: get
+ * :id: recette _id
+ * :user: utilisateur _id
+ */
+app.get("/likeRecette/:id/:user", passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const id = req.params?.id;
+  const user = req.params?.user;
+  const utilisateur = await UtilisateurManager.like(user, id);
+  const recette = await RecetteManager.like(id);
+  res.json({ user: utilisateur, recette: recette });
+})
+
+/**
+ * route: /unlikeRecette/:id/:user
+ * method: get
+ * :id: recette _id
+ * :user: utilisateur _id
+ */
+ app.get("/unlikeRecette/:id/:user", passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const id = req.params?.id;
+  const user = req.params?.user;
+  const recette = await RecetteManager.unlike(id);
+  res.json({ user: user, recette: recette });
 })
 
 app.listen(PORT, function () {

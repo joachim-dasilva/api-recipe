@@ -22,6 +22,10 @@ Elle permet de gérer les différentes données de ce dernier notamment les **re
  >/getRecette/:id
  3. Supprimer une recette
  >/deleteRecette/:id
+ 4. Aimer une recette
+ >/likeRecette/:id/:user
+ 5. Ne plus aimer une recette
+ >/unlikeRecette/:id/:user
 
 ## POST
 
