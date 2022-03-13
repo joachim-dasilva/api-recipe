@@ -74,7 +74,7 @@ app.post('/login', async (req, res) => {
     res.status(401).json({ error: 'Login / password do not match.' })
     return
   }
-  const userJwt = jwt.sign({ email: result.login }, secret)
+  const userJwt = jwt.sign({ login: result.login }, secret)
   res.json({ jwt: userJwt, user: result })
 })
 
