@@ -30,7 +30,7 @@ passport.use(
   new JwtStrategy(jwtOptions, async function (payload, next) {
     const users = await UtilisateurManager.findAll();
     const result = users.find(user => {
-      return user.login == data.login;
+      return user.login == payload.login;
     });
 
     if (result) {
