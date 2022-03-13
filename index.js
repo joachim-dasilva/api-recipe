@@ -26,6 +26,14 @@ const jwtOptions = {
   secretOrKey: secret
 };
 
+/**
+ * Initialisation de la base de données
+ */
+Manager.url = 'https://cookclico-3218.restdb.io/';
+Manager.key = "8bbec6941b2a172f72e32765bcdfb5798d8cd";
+const RecetteManager = new Recette();
+const UtilisateurManager = new Utilisateur();
+
 passport.use(
   new JwtStrategy(jwtOptions, async function (payload, next) {
     const users = await UtilisateurManager.findAll();
@@ -45,14 +53,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(cors());
 app.use(express.json());
-
-/**
- * Initialisation de la base de données
- */
-Manager.url = 'https://cookclico-3218.restdb.io/';
-Manager.key = "8bbec6941b2a172f72e32765bcdfb5798d8cd";
-const RecetteManager = new Recette();
-const UtilisateurManager = new Utilisateur();
 
 /**
  * route: /login
