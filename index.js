@@ -100,7 +100,7 @@ app.post('/register', async (req, res) => {
  */
 app.get("/getRecettes", passport.authenticate('jwt', { session: false }), async (req, res) => {
   const list = await RecetteManager.findAll();
-  res.json({ recettes: list });
+  res.json( list );
 })
 
 /**
