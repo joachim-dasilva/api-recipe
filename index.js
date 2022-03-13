@@ -19,7 +19,6 @@ const { Recette } = require('./class/Recette');
 const { Utilisateur } = require('./class/Utilisateur');
 const sha256 = require('js-sha256');
 const secret = 'Z3kd4dPl21c';
-const users = [{ login: 'cookclico', password: 'apidae' }];
 const ExtractJwt = passportJWT.ExtractJwt;
 const JwtStrategy = passportJWT.Strategy;
 const jwtOptions = {
@@ -28,11 +27,14 @@ const jwtOptions = {
 };
 
 passport.use(
-  new JwtStrategy(jwtOptions, function (payload, next) {
-    const user = users.find(user => user.email === payload.email)
+  new JwtStrategy(jwtOptions, async function (payload, next) {
+    const users = await UtilisateurManager.findAll();
+    const result = users.find(user => {
+      return user.login == data.login;
+    });
 
-    if (user) {
-      next(null, user)
+    if (result) {
+      next(null, result)
     } else {
       next(null, false)
     }
@@ -167,7 +169,7 @@ app.get("/likeRecette/:id/:user", passport.authenticate('jwt', { session: false 
  * :id: recette _id
  * :user: utilisateur _id
  */
- app.get("/unlikeRecette/:id/:user", passport.authenticate('jwt', { session: false }), async (req, res) => {
+app.get("/unlikeRecette/:id/:user", passport.authenticate('jwt', { session: false }), async (req, res) => {
   const id = req.params?.id;
   const user = req.params?.user;
   const recette = await RecetteManager.unlike(id);
