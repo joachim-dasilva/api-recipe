@@ -40,8 +40,8 @@ class Recette extends Manager {
      */
     async delete(id) {
         const recetteLineManager = new RecetteLine();
-        const lines = await this.find(id);
-        for (const line of lines) {
+        const recette = await this.find(id);
+        for (const line of recette?.lines) {
             await recetteLineManager.delete(line._id);
         }
         return await super.delete(id);
