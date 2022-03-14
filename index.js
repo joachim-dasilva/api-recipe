@@ -115,6 +115,15 @@ app.get("/getRecette/:id", passport.authenticate('jwt', { session: false }), asy
 })
 
 /**
+ * route: /getRecettesByPopularity
+ * method: get
+ */
+app.get("/getRecettesByPopularity", passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const list = await RecetteManager.findAll().then(r => r.sort((a, b) => b.likes - (a.likes)));
+  res.json( list );
+})
+
+/**
  * route: /postRecette
  * method: post
  * body: nom, description, nbPersonne, lines[](text, qte, typeQte)
