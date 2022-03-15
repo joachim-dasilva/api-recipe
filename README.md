@@ -17,14 +17,18 @@ Elle permet de gérer les différentes données de ce dernier notamment les **re
 ## GET
 
  1. Récupérer la liste des recettes
-> /getRecettes
+ >/getRecettes
  2. Récupérer une recette
  >/getRecette/:id
- 3. Supprimer une recette
+ 3. Récupérer les recettes avec le plus de likes
+ >/getRecettesByPopularity
+ 4. Récupérer une recette aléatoire
+ >/getRecetteRandom
+ 5. Supprimer une recette
  >/deleteRecette/:id
- 4. Aimer une recette
+ 6. Aimer une recette
  >/likeRecette/:id/:user
- 5. Ne plus aimer une recette
+ 7. Ne plus aimer une recette
  >/unlikeRecette/:id/:user
 
 ## POST
