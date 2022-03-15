@@ -124,6 +124,17 @@ app.get("/getRecettesByPopularity", passport.authenticate('jwt', { session: fals
 })
 
 /**
+ * @route /getRecetteRandom
+ * @method get
+ */
+app.get("/getRecetteRandom", passport.authenticate('jwt', { session: false }), async (req, res) => {
+  const list = await
+                RecetteManager.findAll()
+                .then(r => r[Math.floor(Math.random()*r.length)]);
+  res.json( list );
+})
+
+/**
  * route: /postRecette
  * method: post
  * body: nom, description, nbPersonne, lines[](text, qte, typeQte)
