@@ -49,15 +49,16 @@ passport.use(
   })
 );
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({limit: "100mb"}));
+app.use(bodyParser.urlencoded({limit: "100mb", extended: true}));
 app.use(passport.initialize());
 app.use(cors());
 app.use(express.json());
 
 /**
- * route: /login
- * method: post
- * body: login, password
+ * @route /login
+ * @method post
+ * @body login, password
  */
 app.post('/login', async (req, res) => {
   const data = req.body;
@@ -79,9 +80,9 @@ app.post('/login', async (req, res) => {
 })
 
 /**
- * route: /register
- * method: post
- * body: login, password
+ * @route /register
+ * @method post
+ * @body login, password
  */
 app.post('/register', async (req, res) => {
   const data = req.body;
@@ -95,18 +96,23 @@ app.post('/register', async (req, res) => {
 })
 
 /**
- * route: /getRecettes
- * method: get
+ * Récupère toutes les recettes de la base de données
+ * 
+ * @route /getRecettes
+ * @method get
  */
 app.get("/getRecettes", passport.authenticate('jwt', { session: false }), async (req, res) => {
   const list = await RecetteManager.findAll();
-  res.json( list );
+  res.json(list);
 })
 
 /**
- * route: /getRecette/:id
- * method: get
- * :id: recette _id
+ * Récupère une recette de la base de données
+ * 
+ * @route /getRecette/:id
+ * @method get
+ * 
+ * @param :id -> recette _id
  */
 app.get("/getRecette/:id", passport.authenticate('jwt', { session: false }), async (req, res) => {
   const id = req.params?.id;
@@ -115,29 +121,34 @@ app.get("/getRecette/:id", passport.authenticate('jwt', { session: false }), asy
 })
 
 /**
- * route: /getRecettesByPopularity
- * method: get
+ * Récupère toutes les recettes en fonction de leur popularité / nombre de likes
+ * (plus populaire à la moins populaire)
+ * 
+ * @route /getRecettesByPopularity
+ * @method get
  */
 app.get("/getRecettesByPopularity", passport.authenticate('jwt', { session: false }), async (req, res) => {
   const list = await RecetteManager.findAll().then(r => r.sort((a, b) => b.likes - (a.likes)));
-  res.json( list );
+  res.json(list);
 })
 
 /**
+ * Récupère une recette de la base de données de façon aléatoire
+ * 
  * @route /getRecetteRandom
  * @method get
  */
 app.get("/getRecetteRandom", passport.authenticate('jwt', { session: false }), async (req, res) => {
-  const list = await
-                RecetteManager.findAll()
-                .then(r => r[Math.floor(Math.random()*r.length)]);
-  res.json( list );
+  const list = await RecetteManager.findAll().then(r => r[Math.floor(Math.random() * r.length)]);
+  res.json(list);
 })
 
 /**
- * route: /postRecette
- * method: post
- * body: nom, description, nbPersonne, lines[](text, qte, typeQte)
+ * Ajoute une recette à la base de données
+ * 
+ * @route /postRecette
+ * @method post
+ * @body nom, description, nbPersonne, lines[](text, qte, typeQte)
  */
 app.post("/postRecette", passport.authenticate('jwt', { session: false }), async (req, res) => {
   const data = req.body;
@@ -146,9 +157,12 @@ app.post("/postRecette", passport.authenticate('jwt', { session: false }), async
 })
 
 /**
- * route: /deleteRecette/:id
- * method: get
- * :id: recette _id
+ * Supprime une recette de la base de données
+ * 
+ * @route /deleteRecette/:id
+ * @method get
+ * 
+ * @param :id -> recette _id
  */
 app.get("/deleteRecette/:id", passport.authenticate('jwt', { session: false }), async (req, res) => {
   const id = req.params?.id;
@@ -157,10 +171,13 @@ app.get("/deleteRecette/:id", passport.authenticate('jwt', { session: false }), 
 })
 
 /**
- * route: /updateRecette/:id
- * method: post
- * body: nom?, description?, nbPersonne?, lines[](text, qte, typeQte)?
- * :id: recette _id
+ * Modifie une recette de la base de données
+ * 
+ * @route /updateRecette/:id
+ * @method post
+ * @body nom?, description?, nbPersonne?, lines[](text, qte, typeQte)?
+ * 
+ * @param :id: recette _id
  */
 app.post("/updateRecette/:id", passport.authenticate('jwt', { session: false }), async (req, res) => {
   const id = req.params?.id;
@@ -170,10 +187,13 @@ app.post("/updateRecette/:id", passport.authenticate('jwt', { session: false }),
 })
 
 /**
- * route: /likeRecette/:id/:user
- * method: get
- * :id: recette _id
- * :user: utilisateur _id
+ * Ajoute une recette à la liste des "likes" de l'utilisateur
+ * 
+ * @route /likeRecette/:id/:user
+ * @method get
+ * 
+ * @param id (recette _id)
+ * @param user (utilisateur _id)
  */
 app.get("/likeRecette/:id/:user", passport.authenticate('jwt', { session: false }), async (req, res) => {
   const id = req.params?.id;
@@ -184,10 +204,13 @@ app.get("/likeRecette/:id/:user", passport.authenticate('jwt', { session: false 
 })
 
 /**
- * route: /unlikeRecette/:id/:user
- * method: get
- * :id: recette _id
- * :user: utilisateur _id
+ * Supprime une recette de la liste des "likes" de l'utilisateur
+ * 
+ * @route /unlikeRecette/:id/:user
+ * @method get
+ * 
+ * @param id (recette _id)
+ * @param user (utilisateur _id)
  */
 app.get("/unlikeRecette/:id/:user", passport.authenticate('jwt', { session: false }), async (req, res) => {
   const id = req.params?.id;
